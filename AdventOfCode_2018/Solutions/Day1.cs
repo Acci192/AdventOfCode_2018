@@ -8,7 +8,7 @@ namespace AdventOfCode_2018.Solutions
     {
         public static string A (string input)
         {
-            var result = input.Split('\n').Sum(Convert.ToInt32);
+            var result = input.Split('\n').Sum(int.Parse);
 
             return result.ToString();
         }
@@ -21,7 +21,7 @@ namespace AdventOfCode_2018.Solutions
             {
                 foreach(var i in input.Split('\n'))
                 {
-                    result += Convert.ToInt32(i);
+                    result += int.Parse(i);
                     if (!results.Add(result))
                         return result.ToString();
                 }
