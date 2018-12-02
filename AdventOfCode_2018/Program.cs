@@ -7,8 +7,9 @@ namespace AdventOfCode_2018
     {
         static void Main(string[] args)
         {
-            var input = System.IO.File.ReadAllText("../../Inputs/InputDay2.txt");
             Func<string, string> methodToRun = Day2.B;
+            var input = System.IO.File.ReadAllText($"../../Inputs/{methodToRun.Method.DeclaringType?.Name}.txt");
+            
 
             var result = methodToRun(input);
 

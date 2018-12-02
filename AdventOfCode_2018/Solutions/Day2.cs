@@ -31,7 +31,7 @@ namespace AdventOfCode_2018.Solutions
 
         public static string B(string input)
         {
-            var rows = input.Split('\n').Select(x => x.Replace("\r", "")).ToList();
+            var rows = input.Replace("\r", "").Split('\n').ToList();
             var uniqueRows = new HashSet<string>(rows);
 
             foreach (var row in rows)
