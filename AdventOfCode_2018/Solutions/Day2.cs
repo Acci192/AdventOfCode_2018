@@ -9,7 +9,7 @@ namespace AdventOfCode_2018.Solutions
     {
         public static string A(string input)
         {
-            var rows = input.Split('\n').Select(x => x.Replace("\r", "")).ToList();
+            var rows = input.Replace("\r", "").Split('\n').ToList();
             var two = 0;
             var three = 0;
             foreach (var row in rows)
