@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -13,6 +14,7 @@ namespace AdventOfCode_2018.Solutions
         {
             var grid = new int[1200, 1200];
             var splitInput = input.Replace("\r", "").Split('\n');
+            var sum = 0;
 
             foreach (var row in splitInput)
             {   
@@ -27,19 +29,11 @@ namespace AdventOfCode_2018.Solutions
                 {
                     for (var j = 0; j < height; j++)
                     {
-                        grid[posY + j, posX + i]++;
+                        if (++grid[posY + j, posX + i] == 2) sum++;
                     }
                 }
             }
 
-            var sum = 0;
-            for (var i = 0; i < 1200; i++)
-            {
-                for (var j = 0; j < 1200; j++)
-                {
-                    if (grid[j, i] > 1) sum++;
-                }
-            }
             return $"{sum}";
         }
 

@@ -7,15 +7,17 @@ namespace AdventOfCode_2018
     {
         static void Main(string[] args)
         {
-            Func<string, string> methodToRun = Day3.B;
+            Func<string, string> methodToRun = Day4.B;
             var input = System.IO.File.ReadAllText($"../../Inputs/{methodToRun.Method.DeclaringType?.Name}.txt");
             
 
             var result = methodToRun(input);
 
             Console.WriteLine(result);
+            Console.ReadKey();
 
-            Console.Write("\nIf you want to test the execution time of the current method, enter a number of iterations: ");
+            /*
+             Console.Write("\nIf you want to test the execution time of the current method, enter a number of iterations: ");
             var readLine = Console.ReadLine();
 
             if (!int.TryParse(readLine, out var numIterations)) return;
@@ -24,6 +26,7 @@ namespace AdventOfCode_2018
             Console.WriteLine();
             Benchmark.TimeOperations(methodToRun, input, numIterations);
             Console.ReadKey();
+            */
         }
     }
 }
