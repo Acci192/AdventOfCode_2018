@@ -96,7 +96,7 @@ namespace AdventOfCode_2018.Solutions
             var index = -1;
             foreach (var worker in workers)
             {
-                for (int i = 0; i < worker.Value.Length; i++)
+                for (var i = 0; i < worker.Value.Length; i++)
                 {
                     if (worker.Value[i] > minute)
                     {
