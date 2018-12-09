@@ -54,6 +54,7 @@
     <Compile Include="Solutions\Day6.cs" />
     <Compile Include="Solutions\Day7.cs" />
     <Compile Include="Solutions\Day8.cs" />
+    <Compile Include="Solutions\Day9.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -67,6 +68,7 @@
     <Content Include="Inputs\Day6.txt" />
     <Content Include="Inputs\Day7.txt" />
     <Content Include="Inputs\Day8.txt" />
+    <Content Include="Inputs\Day9.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
