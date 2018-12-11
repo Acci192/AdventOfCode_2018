@@ -66,6 +66,56 @@ namespace AdventOfCode_2018.Solutions
             return sum;
         }
 
+        // This is an optimized solution of the problem based the solution from reddit user: tribulu 
+        public static string B_Optimized(string input)
+        {
+            var serialNumber = int.Parse(input);
+            var size = 300;
+
+            var grid = new int[size + 1, size + 1];
+            for(var y = 1; y <= size; y++)
+            {
+                for(var x = 1; x <= size; x++)
+                {
+                    var rackId = x + 10;
+                    var powerLevel = rackId * y;
+                    powerLevel += serialNumber;
+                    powerLevel *= rackId;
+
+                    powerLevel = Math.Abs(powerLevel / 100 % 10);
+                    powerLevel -= 5;
+
+                    grid[x, y] = powerLevel + grid[x - 1, y] + grid[x, y - 1] - grid[x - 1, y - 1];
+                } 
+            }
+
+            var max = int.MinValue;
+            var curX = int.MinValue;
+            var curY = int.MinValue;
+            var curS = int.MinValue;
+            for (var s = 1; s <= size; s++)
+            {
+                for (var y = s; y <= size; y++)
+                {
+                    for (var x = s; x <= size; x++)
+                    {
+                        var sum = grid[x, y] - grid[x - s, y] - grid[x, y - s] + grid[x - s, y - s];
+                        if(sum > max)
+                        {
+                            max = sum;
+                            curX = x;
+                            curY = y;
+                            curS = s;
+                        }
+                    }
+                }
+            }
+
+            return $"{curX - curS + 1},{curY - curS + 1},{curS}";
+        }
+
+        // This is my original solution for the problem which is highly ineffective both in time and space. (I don't recommend running it)
+        // It does however solve the problem
         public static string B(string input)
         {
             var serialNumber = int.Parse(input);
@@ -95,7 +145,7 @@ namespace AdventOfCode_2018.Solutions
                 {
                     for(var s = size - Math.Max(y, x); s > 0; s--)
                     {
-                        if (getAreaValuez(grid, x, y, s) == int.MinValue) break;
+                        if (getAreaValue(grid, x, y, s) == int.MinValue) break;
                     }
                     
                 }
@@ -132,29 +182,6 @@ namespace AdventOfCode_2018.Solutions
 
             sum += nextArea;
             seenValues[tuple] = sum;
-            return sum;
-        }
-
-        private static int getAreaValuez(int[,] grid, int x, int y, int size)
-        {
-            if (size == 1)
-            {
-                return grid[x, y];
-            }
-
-            if (y + size > 300 || x + size > 300)
-            {
-                return int.MinValue;
-            }
-            var sum = grid[x, y];
-            for (int d = 1; d < size; d++)
-            {
-                sum += grid[x + d, y];
-                sum += grid[x, y + d];
-            }
-            var nextArea = getAreaValue(grid, x + 1, y + 1, size - 1);
-
-            sum += nextArea;
             return sum;
         }
     }
