@@ -63,9 +63,6 @@ namespace AdventOfCode_2018.Solutions
             }
         }
 
-        
-
-
         public static string B  (string input)
         {
             var rows = input.Replace("\r", "").Split('\n').ToList();
