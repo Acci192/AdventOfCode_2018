@@ -42,11 +42,8 @@ namespace AdventOfCode_2018.Solutions
                 temp = temp.TrimEnd('.');
                 lastPots = new StringBuilder(temp);
                 pots = new StringBuilder(temp);
-                Console.WriteLine(pots.ToString());
-
             }
 
-            
             var sum = 0;
             for(var i = 0; i < pots.Length; i++)
             {
@@ -73,11 +70,12 @@ namespace AdventOfCode_2018.Solutions
             }
 
             var zeroIndex = 0;
-            var sum = 0;
-            var lastSum = int.MinValue;
-            var lastDiff = int.MinValue;
+            long sum = 0;
+            long lastSum = int.MinValue;
+            long lastDiff = int.MinValue;
             var count = 0;
-            for (var g = 0; g < 120; g++)
+
+            for (var g = 0; g < 1000; g++)
             {
                 sum = 0;
                 zeroIndex += 3;
@@ -92,9 +90,11 @@ namespace AdventOfCode_2018.Solutions
                     pots[i] = combinations[pattern];
                 }
 
-
-                lastPots = new StringBuilder(pots.ToString());
-                Console.WriteLine(pots.ToString());
+                var temp = pots.ToString().TrimStart('.');
+                zeroIndex -= pots.Length - temp.Length;
+                temp = temp.TrimEnd('.');
+                lastPots = new StringBuilder(temp);
+                pots = new StringBuilder(temp);
 
                 for (var i = 0; i < pots.Length; i++)
                 {
@@ -103,14 +103,15 @@ namespace AdventOfCode_2018.Solutions
                         sum += i - zeroIndex;
                     }
                 }
-                var diff = sum - lastSum;
+                long diff = sum - lastSum;
 
                 if(diff == lastDiff)
                 {
                     count++;
                     if (count > 5)
                     {
-                        break;
+                        sum += diff * (50000000000 - g - 1);
+                        return $"{sum}";
                     }
                 }
                 else
@@ -119,31 +120,9 @@ namespace AdventOfCode_2018.Solutions
                 }
 
                 lastSum = sum;
-                lastDiff = diff;
-                
+                lastDiff = diff; 
             }
-
-
-            
-            //for (var i = 0; i < pots.Length; i++)
-            //{
-            //    if (pots[i] == '#')
-            //    {
-            //        sum += i - zeroIndex;
-            //    }
-            //}
-            return $"{sum}";
-        }
-
-        // Hacky solution for now (Was looking for repeating differences and just calculate the rest)
-        // Had to go and therefore I did it this way. Will be fixed
-        public static string test(string input)
-        {
-            //var sum = 19437;
-            long sum = 19437;
-            sum += 186 * (50000000000 - 98);
-
-            return $"{sum - 186}";
+            return $"No answer";
         }
     }
 }
