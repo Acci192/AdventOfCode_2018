@@ -14,105 +14,52 @@ namespace AdventOfCode_2018.Solutions
             var rows = input.Replace("\r", "").Split('\n').ToList();
             var width = rows[0].Length;
             var height = rows.Count();
-            for(var i = 0; i < height; i++)
-            {
-                for(var j = 0; j < width; j++)
-                {
-                    grid[j, i] = rows[i][j];
-                }
-            }
             var cars = new List<Car>();
-            // Find cars
-            for (int y = 0; y < height; y++)
+            for (var y = 0; y < height; y++)
             {
-                for (int x = 0; x < width; x++)
+                for (var x = 0; x < width; x++)
                 {
-                    switch (grid[x, y])
+                    switch (rows[y][x])
                     {
                         case '<':
                             cars.Add(new Car(x, y, 3));
-                            ReplaceCar(x, y);
+                            grid[x, y] = '-';
                             break;
                         case '>':
                             cars.Add(new Car(x, y, 1));
-                            ReplaceCar(x, y);
+                            grid[x, y] = '-';
                             break;
                         case '^':
                             cars.Add(new Car(x, y, 0));
-                            ReplaceCar(x, y);
+                            grid[x, y] = '|';
                             break;
                         case 'v':
                             cars.Add(new Car(x, y, 2));
-                            ReplaceCar(x, y);
+                            grid[x, y] = '|';
                             break;
                         default:
+                            grid[x, y] = rows[y][x];
                             break;
                     }
                 }
             }
-            
-            for (var i = 0; i < 1000; i++)
-            {
-                var unique = new HashSet<int>();
-                for (int y = 0; y < height; y++)
-                {
-                    for (int x = 0; x < width; x++)
-                    {
-                        var curCar = cars.FirstOrDefault(carz => carz.X == x && carz.Y == y);
-                        if(curCar != null)
-                        {
-                            if (unique.Add(curCar.Id))
-                            {
-                                curCar.Move();
-                                if (cars.Count(c => c.X == curCar.X && c.Y == curCar.Y) > 1)
-                                {
-                                    var temp = cars.Where(carz => carz.X == curCar.X && carz.Y == curCar.Y);
-                                    foreach (var tempCar in temp)
-                                    {
-                                        Console.WriteLine($"{tempCar.Id} : {tempCar.X},{tempCar.Y}");
-                                    }
-                                }
-                            }
-                            
-                        }
-                    }
-                }
-                //foreach (var car in cars)
-                //{
-                //    car.Move();
-                //    //if((cars.Count(carz => carz.X == car.X && carz.Y == car.Y) > 1)){
-                //    //    Console.WriteLine($"{car.X},{car.Y}");
-                //    //    var temp = cars.Where(carz => carz.X == car.X && carz.Y == car.Y);
-                //    //    foreach(var tempCar in temp)
-                //    //    {
-                //    //        Console.WriteLine($"{tempCar.Id} : {tempCar.X},{tempCar.Y}");
-                //    //    }
 
-                //    //}
-                //    if (grid[car.X, car.Y] == ' ')
-                //    {
-                //        Console.WriteLine("ERROR");
-                //    }
-                //}
-                for (int y = 0; y < height; y++)
+            while (cars.Count() > 1)
+            {
+                cars.Sort();
+
+                foreach (var car in cars)
                 {
-                    for (int x = 0; x < width; x++)
+                    car.Move();
+                    if(cars.Count(c => c.X == car.X && c.Y == car.Y && c.Id != car.Id) > 0)
                     {
-                        if (cars.Count(carz => carz.X == x && carz.Y == y) > 1)
-                        {
-                            var temp = cars.Where(carz => carz.X == x && carz.Y == y);
-                            foreach (var tempCar in temp)
-                            {
-                                Console.WriteLine($"{tempCar.Id} : {tempCar.X},{tempCar.Y}");
-                            }
-                            //return "";
-                        }
+                        car.Alive = false;
+                        return $"{car.X},{car.Y}";
                     }
                 }
             }
-
-            //PrintMap(grid, width);
-            return $"Result";
+            var collisionCar = cars.FirstOrDefault(c => !c.Alive);
+            return $"{collisionCar.X},{collisionCar.Y}";
         }
 
         public static string B(string input)
@@ -120,121 +67,58 @@ namespace AdventOfCode_2018.Solutions
             var rows = input.Replace("\r", "").Split('\n').ToList();
             var width = rows[0].Length;
             var height = rows.Count();
-            for (var i = 0; i < height; i++)
-            {
-                for (var j = 0; j < width; j++)
-                {
-                    grid[j, i] = rows[i][j];
-                }
-            }
             var cars = new List<Car>();
-            // Find cars
-            for (int y = 0; y < height; y++)
+            for (var y = 0; y < height; y++)
             {
-                for (int x = 0; x < width; x++)
+                for (var x = 0; x < width; x++)
                 {
-                    switch (grid[x, y])
+                    switch (rows[y][x])
                     {
                         case '<':
                             cars.Add(new Car(x, y, 3));
-                            ReplaceCar(x, y);
+                            grid[x, y] = '-';
                             break;
                         case '>':
                             cars.Add(new Car(x, y, 1));
-                            ReplaceCar(x, y);
+                            grid[x, y] = '-';
                             break;
                         case '^':
                             cars.Add(new Car(x, y, 0));
-                            ReplaceCar(x, y);
+                            grid[x, y] = '|';
                             break;
                         case 'v':
                             cars.Add(new Car(x, y, 2));
-                            ReplaceCar(x, y);
+                            grid[x, y] = '|';
                             break;
                         default:
+                            grid[x, y] = rows[y][x];
                             break;
                     }
                 }
             }
 
-            for (var i = 0; i < 100000; i++)
+            while (cars.Count() > 1)
             {
-                var unique = new HashSet<int>();
-                for (int y = 0; y < height; y++)
+                cars.Sort();
+
+                foreach(var car in cars)
                 {
-                    for (int x = 0; x < width; x++)
+                    car.Move();
+                    var collidingCars = cars.Where(c => c.X == car.X && c.Y == car.Y && c.Id != car.Id).ToList();
+                    if(collidingCars.Count > 0)
                     {
-                        var curCar = cars.FirstOrDefault(carz => carz.X == x && carz.Y == y);
-                        if (curCar != null)
+                        foreach(var c in collidingCars)
                         {
-                            if (unique.Add(curCar.Id))
-                            {
-                                curCar.Move();
-                                if (cars.Count(c => c.X == curCar.X && c.Y == curCar.Y) > 1)
-                                {
-                                    var temp = cars.Where(carz => carz.X == curCar.X && carz.Y == curCar.Y);
-                                    cars = cars.Where(c => temp.Count(t => t.Id == c.Id) == 0).ToList();
-                                    
-                                }
-                            }
+                            c.Alive = false;
                         }
+                        car.Alive = false;
                     }
                 }
-                if (cars.Count() == 1)
-                {
-                    break;
-                }
-                //foreach (var car in cars)
-                //{
-                //    car.Move();
-                //    //if((cars.Count(carz => carz.X == car.X && carz.Y == car.Y) > 1)){
-                //    //    Console.WriteLine($"{car.X},{car.Y}");
-                //    //    var temp = cars.Where(carz => carz.X == car.X && carz.Y == car.Y);
-                //    //    foreach(var tempCar in temp)
-                //    //    {
-                //    //        Console.WriteLine($"{tempCar.Id} : {tempCar.X},{tempCar.Y}");
-                //    //    }
-
-                //    //}
-                //    if (grid[car.X, car.Y] == ' ')
-                //    {
-                //        Console.WriteLine("ERROR");
-                //    }
-                //}
-
-
-                //for (int y = 0; y < height; y++)
-                //{
-                //    for (int x = 0; x < width; x++)
-                //    {
-                //        if (cars.Count(carz => carz.X == x && carz.Y == y) > 1)
-                //        {
-                //            var temp = cars.Where(carz => carz.X == x && carz.Y == y);
-                //            foreach (var tempCar in temp)
-                //            {
-                //                Console.WriteLine($"{tempCar.Id} : {tempCar.X},{tempCar.Y}");
-                //            }
-                //            //return "";
-                //        }
-                //    }
-                //}
+                cars.RemoveAll(c => !c.Alive);
             }
 
-            //PrintMap(grid, width);
-            return $"Result";
-        }
-
-        private static void ReplaceCar(int x, int y)
-        {
-            if((grid[x - 1, y] == '-' && (grid[x-1,y] == grid[x+1, y] || grid[x + 1, y] == '+'))
-                || (grid[x + 1, y] == '-' && (grid[x - 1, y] == grid[x + 1, y] || grid[x - 1, y] == '+')))
-            {
-                grid[x, y] = '-';
-            }
-            else
-            {
-                grid[x, y] = '|';
-            }
+            var lastCar = cars.FirstOrDefault();
+            return $"{lastCar.X},{lastCar.Y}";
         }
 
         private static int mod(int x, int m)
@@ -243,12 +127,13 @@ namespace AdventOfCode_2018.Solutions
             return r < 0 ? r + m : r;
         }
 
-        private class Car
+        private class Car : IComparable<Car>
         {
             public int X { get; set; }
             public int Y { get; set; }
             public int Direction { get; set; }
             public int NextTurn { get; set; }
+            public bool Alive { get; set; }
             private static int idCounter = 0;
             public int Id { get; set; }
 
@@ -258,6 +143,7 @@ namespace AdventOfCode_2018.Solutions
                 Y = y;
                 Direction = direction;
                 NextTurn = -1;
+                Alive = true;
                 Id = idCounter++;
             }
 
@@ -327,20 +213,22 @@ namespace AdventOfCode_2018.Solutions
                     default:
                         break;
                 }
-
-                
             }
-        }
 
-        private static void PrintMap(char[,] map, int size)
-        {
-            for(int y = 0; y < size; y++)
+            public int CompareTo(Car other)
             {
-                for(int x = 0; x < size; x++)
-                {
-                    Console.Write(map[x, y]);
-                }
-                Console.Write('\n');
+                if (other == null)
+                    return 1;
+                if (this.Y < other.Y)
+                    return -1;
+                if (this.Y > other.Y)
+                    return 1;
+                if (this.X < other.X)
+                    return -1;
+                if (this.X > other.X)
+                    return 1;
+
+                return 0;
             }
         }
     }
