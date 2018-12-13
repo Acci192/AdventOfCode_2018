@@ -53,6 +53,7 @@ namespace AdventOfCode_2018.Solutions
             
             for (var i = 0; i < 1000; i++)
             {
+                var unique = new HashSet<int>();
                 for (int y = 0; y < height; y++)
                 {
                     for (int x = 0; x < width; x++)
@@ -60,15 +61,19 @@ namespace AdventOfCode_2018.Solutions
                         var curCar = cars.FirstOrDefault(carz => carz.X == x && carz.Y == y);
                         if(curCar != null)
                         {
-                            curCar.Move();
-                            if(cars.Count(c => c.X == curCar.X && c.Y == curCar.Y) > 1)
+                            if (unique.Add(curCar.Id))
                             {
-                                var temp = cars.Where(carz => carz.X == curCar.X && carz.Y == curCar.Y);
-                                foreach (var tempCar in temp)
+                                curCar.Move();
+                                if (cars.Count(c => c.X == curCar.X && c.Y == curCar.Y) > 1)
                                 {
-                                    Console.WriteLine($"{tempCar.Id} : {tempCar.X},{tempCar.Y}");
+                                    var temp = cars.Where(carz => carz.X == curCar.X && carz.Y == curCar.Y);
+                                    foreach (var tempCar in temp)
+                                    {
+                                        Console.WriteLine($"{tempCar.Id} : {tempCar.X},{tempCar.Y}");
+                                    }
                                 }
                             }
+                            
                         }
                     }
                 }
@@ -104,6 +109,115 @@ namespace AdventOfCode_2018.Solutions
                         }
                     }
                 }
+            }
+
+            //PrintMap(grid, width);
+            return $"Result";
+        }
+
+        public static string B(string input)
+        {
+            var rows = input.Replace("\r", "").Split('\n').ToList();
+            var width = rows[0].Length;
+            var height = rows.Count();
+            for (var i = 0; i < height; i++)
+            {
+                for (var j = 0; j < width; j++)
+                {
+                    grid[j, i] = rows[i][j];
+                }
+            }
+            var cars = new List<Car>();
+            // Find cars
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    switch (grid[x, y])
+                    {
+                        case '<':
+                            cars.Add(new Car(x, y, 3));
+                            ReplaceCar(x, y);
+                            break;
+                        case '>':
+                            cars.Add(new Car(x, y, 1));
+                            ReplaceCar(x, y);
+                            break;
+                        case '^':
+                            cars.Add(new Car(x, y, 0));
+                            ReplaceCar(x, y);
+                            break;
+                        case 'v':
+                            cars.Add(new Car(x, y, 2));
+                            ReplaceCar(x, y);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+
+            for (var i = 0; i < 100000; i++)
+            {
+                var unique = new HashSet<int>();
+                for (int y = 0; y < height; y++)
+                {
+                    for (int x = 0; x < width; x++)
+                    {
+                        var curCar = cars.FirstOrDefault(carz => carz.X == x && carz.Y == y);
+                        if (curCar != null)
+                        {
+                            if (unique.Add(curCar.Id))
+                            {
+                                curCar.Move();
+                                if (cars.Count(c => c.X == curCar.X && c.Y == curCar.Y) > 1)
+                                {
+                                    var temp = cars.Where(carz => carz.X == curCar.X && carz.Y == curCar.Y);
+                                    cars = cars.Where(c => temp.Count(t => t.Id == c.Id) == 0).ToList();
+                                    
+                                }
+                            }
+                        }
+                    }
+                }
+                if (cars.Count() == 1)
+                {
+                    break;
+                }
+                //foreach (var car in cars)
+                //{
+                //    car.Move();
+                //    //if((cars.Count(carz => carz.X == car.X && carz.Y == car.Y) > 1)){
+                //    //    Console.WriteLine($"{car.X},{car.Y}");
+                //    //    var temp = cars.Where(carz => carz.X == car.X && carz.Y == car.Y);
+                //    //    foreach(var tempCar in temp)
+                //    //    {
+                //    //        Console.WriteLine($"{tempCar.Id} : {tempCar.X},{tempCar.Y}");
+                //    //    }
+
+                //    //}
+                //    if (grid[car.X, car.Y] == ' ')
+                //    {
+                //        Console.WriteLine("ERROR");
+                //    }
+                //}
+
+
+                //for (int y = 0; y < height; y++)
+                //{
+                //    for (int x = 0; x < width; x++)
+                //    {
+                //        if (cars.Count(carz => carz.X == x && carz.Y == y) > 1)
+                //        {
+                //            var temp = cars.Where(carz => carz.X == x && carz.Y == y);
+                //            foreach (var tempCar in temp)
+                //            {
+                //                Console.WriteLine($"{tempCar.Id} : {tempCar.X},{tempCar.Y}");
+                //            }
+                //            //return "";
+                //        }
+                //    }
+                //}
             }
 
             //PrintMap(grid, width);
