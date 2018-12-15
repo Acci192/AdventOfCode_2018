@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -53,6 +54,7 @@
     <Compile Include="Solutions\Day10.cs" />
     <Compile Include="Solutions\Day11.cs" />
     <Compile Include="Solutions\Day13.cs" />
+    <Compile Include="Solutions\Day14.cs" />
     <Compile Include="Solutions\Day2.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -81,6 +83,7 @@
     <Content Include="Inputs\Day8.txt" />
     <Content Include="Inputs\Day9.txt" />
     <Content Include="Inputs\Day12.txt" />
+    <Content Include="Inputs\Day14.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
