@@ -8,10 +8,32 @@ namespace AdventOfCode_2018.Solutions
 {
     public class Day16
     {
+        private static List<Func<int, int, int, int[], int[]>> Operations = 
+            new List<Func<int, int, int, int[], int[]>> {
+                addr,
+                addi,
+                mulr,
+                muli,
+                banr,
+                bani,
+                borr,
+                bori,
+                setr,
+                seti,
+                gtir,
+                gtri,
+                gtrr,
+                eqir,
+                eqri,
+                eqrr
+            };
+
         public static string A(string input)
         {
             var rows = input.Replace("\r", "").Split('\n').ToList();
             var counter = 0;
+
+
             for(var i = 0; i < rows.Count; i++)
             {
                 // Read starting registers
@@ -46,62 +68,13 @@ namespace AdventOfCode_2018.Solutions
 
                 var same = 0;
 
-                var output = addr(a, b, c, start);
-                if (expected.SequenceEqual(output)) same++;
-
-                output = addi(a, b, c, start);
-                if (expected.SequenceEqual(output)) same++;
-
-                output = mulr(a, b, c, start);
-                if (expected.SequenceEqual(output)) same++;
-
-                output = muli(a, b, c, start);
-                if (expected.SequenceEqual(output)) same++;
-
-                output = banr(a, b, c, start);
-                if (expected.SequenceEqual(output)) same++;
-
-                output = bani(a, b, c, start);
-                if (expected.SequenceEqual(output)) same++;
-
-                output = borr(a, b, c, start);
-                if (expected.SequenceEqual(output)) same++;
-
-                output = bori(a, b, c, start);
-                if (expected.SequenceEqual(output)) same++;
-
-                output = setr(a, b, c, start);
-                if (expected.SequenceEqual(output)) same++;
-
-                output = seti(a, b, c, start);
-                if (expected.SequenceEqual(output)) same++;
-
-                output = gtir(a, b, c, start);
-                if (expected.SequenceEqual(output)) same++;
-
-                output = gtri(a, b, c, start);
-                if (expected.SequenceEqual(output)) same++;
-
-                output = gtrr(a, b, c, start);
-                if (expected.SequenceEqual(output)) same++;
-
-                output = eqir(a, b, c, start);
-                if (expected.SequenceEqual(output)) same++;
-
-                output = eqri(a, b, c, start);
-                if (expected.SequenceEqual(output)) same++;
-
-                output = eqrr(a, b, c, start);
-                if (expected.SequenceEqual(output)) same++;
-
-
-                if (same >= 3)
+                foreach(var o in Operations)
                 {
-                    counter++;
+                    if (expected.SequenceEqual(o(a,b,c,start))) same++;
                 }
 
+                if (same >= 3) counter++;
             }
-
 
             return $"{counter}";
         }
@@ -109,15 +82,21 @@ namespace AdventOfCode_2018.Solutions
         public static string B(string input)
         {
             var rows = input.Replace("\r", "").Split('\n').ToList();
-            var counter = 0;
-            var opCodes = new Dictionary<int, bool[]>();
+            var validOpcodes = new Dictionary<int, bool[]>();
+            var opCodes = new Dictionary<int, int>();
+            var remainingOp = new HashSet<int>();
 
-            for(int i = 0; i < 16; i++)
+            var registers = new int[4];
+            var startOfInstructions = 0;
+
+            for (int i = 0; i < 16; i++)
             {
-                opCodes[i] = new bool[16];
+                validOpcodes[i] = new bool[16];
+                opCodes[i] = -1;
+                remainingOp.Add(i);
                 for (int j = 0; j < 16; j++)
                 {
-                    opCodes[i][j] = true;
+                    validOpcodes[i][j] = true;
                 }
             }
 
@@ -127,8 +106,8 @@ namespace AdventOfCode_2018.Solutions
                 var temp = rows[i].Split('[');
                 if (temp.Length == 1)
                 {
-                    var result = readInstructions(i + 2, rows);
-                    return $"{result}";
+                    startOfInstructions = i + 2;
+                    break;
                 }
                 var start = new int[4];
                 temp = temp[1].Split(',');
@@ -157,73 +136,39 @@ namespace AdventOfCode_2018.Solutions
                 expected[3] = int.Parse(temp[3].TrimEnd(']'));
                 i++;
 
-                var same = 0;
-
-                var output = addr(a, b, c, start);
-                if (!expected.SequenceEqual(output)) opCodes[opCode][0] = false;
-
-                output = addi(a, b, c, start);
-                if (!expected.SequenceEqual(output)) opCodes[opCode][1] = false;
-
-                output = mulr(a, b, c, start);
-                if (!expected.SequenceEqual(output)) opCodes[opCode][2] = false;
-
-                output = muli(a, b, c, start);
-                if (!expected.SequenceEqual(output)) opCodes[opCode][3] = false;
-
-                output = banr(a, b, c, start);
-                if (!expected.SequenceEqual(output)) opCodes[opCode][4] = false;
-
-                output = bani(a, b, c, start);
-                if (!expected.SequenceEqual(output)) opCodes[opCode][5] = false;
-
-                output = borr(a, b, c, start);
-                if (!expected.SequenceEqual(output)) opCodes[opCode][6] = false;
-
-                output = bori(a, b, c, start);
-                if (!expected.SequenceEqual(output)) opCodes[opCode][7] = false;
-
-                output = setr(a, b, c, start);
-                if (!expected.SequenceEqual(output)) opCodes[opCode][8] = false;
-
-                output = seti(a, b, c, start);
-                if (!expected.SequenceEqual(output)) opCodes[opCode][9] = false;
-
-                output = gtir(a, b, c, start);
-                if (!expected.SequenceEqual(output)) opCodes[opCode][10] = false;
-
-                output = gtri(a, b, c, start);
-                if (!expected.SequenceEqual(output)) opCodes[opCode][11] = false;
-
-                output = gtrr(a, b, c, start);
-                if (!expected.SequenceEqual(output)) opCodes[opCode][12] = false;
-
-                output = eqir(a, b, c, start);
-                if (!expected.SequenceEqual(output)) opCodes[opCode][13] = false;
-
-                output = eqri(a, b, c, start);
-                if (!expected.SequenceEqual(output)) opCodes[opCode][14] = false;
-
-                output = eqrr(a, b, c, start);
-                if (!expected.SequenceEqual(output)) opCodes[opCode][15] = false;
-
-
-                if (same >= 3)
+                for(int j = 0; j < opCodes.Count; j++)
                 {
-                    counter++;
+                    if (!expected.SequenceEqual(Operations[j](a, b, c, start))) validOpcodes[opCode][j] = false;
                 }
-
             }
 
+            // Find the correct instruction for each Opcode
+            while (remainingOp.Count > 0)
+            {
+                var toRemove = new List<int>();
+                foreach(var o in remainingOp)
+                {
+                    foreach(var v in validOpcodes)
+                    {
+                        if(v.Value[o] && v.Value.Count(x => x) == 1)
+                        {
+                            opCodes[v.Key] = o;
+                            toRemove.Add(o);
+                        }
+                    }
+                }
+                foreach(var i in toRemove)
+                {
+                    foreach (var vos in validOpcodes)
+                    {
+                        vos.Value[i] = false;
+                    }
+                    remainingOp.Remove(i);
+                }
+            }
 
-            return $"{counter}";
-        }
-
-
-        public static int readInstructions(int start, List<string> rows)
-        {
-            var registers = new int[4];
-            for(int i = start; i < rows.Count; i++)
+            // Execute the instructions from intput
+            for (int i = startOfInstructions; i < rows.Count; i++)
             {
                 var temp = rows[i].Split(' ');
                 var opCode = int.Parse(temp[0]);
@@ -231,59 +176,9 @@ namespace AdventOfCode_2018.Solutions
                 var b = int.Parse(temp[2]);
                 var c = int.Parse(temp[3]);
 
-                switch (opCode)
-                {
-                    case 0:
-                        registers = mulr(a, b, c, registers);
-                        break;
-                    case 1:
-                        registers = eqri(a, b, c, registers);
-                        break;
-                    case 2:
-                        registers = setr(a, b, c, registers);
-                        break;
-                    case 3:
-                        registers = eqrr(a, b, c, registers);
-                        break;
-                    case 4:
-                        registers = gtrr(a, b, c, registers);
-                        break;
-                    case 5:
-                        registers = muli(a, b, c, registers);
-                        break;
-                    case 6:
-                        registers = borr(a, b, c, registers);
-                        break;
-                    case 7:
-                        registers = bani(a, b, c, registers);
-                        break;
-                    case 8:
-                        registers = addr(a, b, c, registers);
-                        break;
-                    case 9:
-                        registers = banr(a, b, c, registers);
-                        break;
-                    case 10:
-                        registers = eqir(a, b, c, registers);
-                        break;
-                    case 11:
-                        registers = gtir(a, b, c, registers);
-                        break;
-                    case 12:
-                        registers = addi(a, b, c, registers);
-                        break;
-                    case 13:
-                        registers = gtri(a, b, c, registers);
-                        break;
-                    case 14:
-                        registers = seti(a, b, c, registers);
-                        break;
-                    case 15:
-                        registers = bori(a, b, c, registers);
-                        break;
-                }
+                registers = Operations[opCodes[opCode]](a, b, c, registers);
             }
-            return registers[0];
+            return $"{registers[0]}";
         }
 
         public static int[] addr(int a, int b, int c, int[] reg)
