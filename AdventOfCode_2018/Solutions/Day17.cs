@@ -15,7 +15,7 @@ namespace AdventOfCode_2018.Solutions
         private static int minY = int.MaxValue;
 
         private static HashSet<Tuple<int, int>> Clay = new HashSet<Tuple<int, int>>();
-        public static string A(string input)
+        public static string AB(string input)
         {
             var rows = input.Replace("\r", "").Split('\n').ToList();
 

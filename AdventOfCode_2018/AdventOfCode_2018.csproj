@@ -58,6 +58,7 @@
     <Compile Include="Solutions\Day15.cs" />
     <Compile Include="Solutions\Day16.cs" />
     <Compile Include="Solutions\Day17.cs" />
+    <Compile Include="Solutions\Day18.cs" />
     <Compile Include="Solutions\Day2.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -80,6 +81,7 @@
     <Content Include="Inputs\Day15.txt" />
     <Content Include="Inputs\Day16.txt" />
     <Content Include="Inputs\Day17.txt" />
+    <Content Include="Inputs\Day18.txt" />
     <Content Include="Inputs\Day2.txt" />
     <Content Include="Inputs\Day3.txt" />
     <Content Include="Inputs\Day4.txt" />
