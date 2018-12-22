@@ -45,23 +45,13 @@ namespace AdventOfCode_2018.Solutions
                 }
             }
 
-
-            //for (var y = 0; y < tarY + 1; y++)
-            //{
-            //    for (var x = 0; x < tarX + 1; x++)
-            //    {
-            //        if (x == tarX && y == tarY)
-            //            return $"{res}";
-            //        res += grid[x, y] % 3;
-            //    }
-            //}
             return $"{res}";
         }
 
         public static string B(string input)
         {
             var rows = input.Replace("\r", "").Split('\n').ToList();
-            var unvisited = new SimplePriorityQueue<Option>();
+            
             var depth = int.Parse(rows[0].Split(' ')[1]);
             var tarX = int.Parse(rows[1].Split(' ')[1].Split(',')[0]);
             var tarY = int.Parse(rows[1].Split(' ')[1].Split(',')[1]);
@@ -70,6 +60,7 @@ namespace AdventOfCode_2018.Solutions
             var maxY = tarY + 150;
 
             var grid = new Node[maxX, maxY];
+            var unvisited = new FastPriorityQueue<Option>(grid.Length * 2);
             grid[0, 0] = new Node(0, depth, 0, 0, unvisited);
 
             for (var i = 1; i < maxX; i++)
@@ -122,8 +113,7 @@ namespace AdventOfCode_2018.Solutions
                         n.Item1.Distance = tDis;
                         n.Item1.Parent = cur;
                         unvisited.UpdatePriority(n.Item1, tDis);
-                    }
-                        
+                    }   
                 }
 
                 visited.Add(cur);
@@ -214,7 +204,7 @@ namespace AdventOfCode_2018.Solutions
             public int Type { get; set; }
             public HashSet<Option> AllowedTools { get; set; }
 
-            public Node(int gIndex, int depth, int x, int y, SimplePriorityQueue<Option> unvisited)
+            public Node(int gIndex, int depth, int x, int y, FastPriorityQueue<Option> unvisited)
             {
                 GIndex = gIndex;
                 Erosion = (gIndex + depth) % 20183;
@@ -253,7 +243,7 @@ namespace AdventOfCode_2018.Solutions
             Climbing,
             Nothing
         }
-        private class Option : IComparable<Option>
+        private class Option : FastPriorityQueueNode
         {
             public int X { get; set; }
             public int Y { get; set; }
@@ -292,17 +282,6 @@ namespace AdventOfCode_2018.Solutions
                 hashCode = hashCode * -1521134295 + Y.GetHashCode();
                 hashCode = hashCode * -1521134295 + Tool.GetHashCode();
                 return hashCode;
-            }
-
-            public int CompareTo(Option other)
-            {
-                if (other == null)
-                    return 1;
-                if (Distance < other.Distance)
-                    return -1;
-                if (Distance > other.Distance)
-                    return 1;
-                return 0;
             }
         }
     }
