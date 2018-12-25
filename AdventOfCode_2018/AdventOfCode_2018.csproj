@@ -71,6 +71,7 @@
     <Compile Include="Solutions\Day22.cs" />
     <Compile Include="Solutions\Day23.cs" />
     <Compile Include="Solutions\Day24.cs" />
+    <Compile Include="Solutions\Day25.cs" />
     <Compile Include="Solutions\Day3.cs" />
     <Compile Include="Solutions\Day4.cs" />
     <Compile Include="Solutions\Day5.cs" />
@@ -99,6 +100,7 @@
     <Content Include="Inputs\Day22.txt" />
     <Content Include="Inputs\Day23.txt" />
     <Content Include="Inputs\Day24.txt" />
+    <Content Include="Inputs\Day25.txt" />
     <Content Include="Inputs\Day3.txt" />
     <Content Include="Inputs\Day4.txt" />
     <Content Include="Inputs\Day5.txt" />
